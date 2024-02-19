@@ -58,7 +58,8 @@ ROOT_URLCONF = 'memoria.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates",
+                 BASE_DIR / "memoria_quiz_app" / "templates" / "memoria"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

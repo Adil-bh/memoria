@@ -21,5 +21,8 @@ from memoria_quiz_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name="home")
+    path('', views.home, name="home"),
+    path('about/', views.about, name="about"),
+    path('privacy/', views.privacy, name="privacy"),
+    path('legals/', views.legals, name="legals")
 ]
