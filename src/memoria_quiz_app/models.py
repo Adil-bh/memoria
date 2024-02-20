@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     )
 
     win_streak = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
-    date_last_question = models.ForeignKey("Question", on_delete=models.SET_NULL, null=True)
+    date_last_question = models.DateField(blank=True, null=True)
 
     subject1 = models.CharField(blank=True, max_length=255)
     subject2 = models.CharField(blank=True, null=True, max_length=255)
