@@ -1,5 +1,20 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from memoria_quiz_app.forms import UserRegistrationForm
+
+
+def signup(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, "memoria/signup.html", context={"form": form})
 
 
 def home(request):
@@ -7,7 +22,7 @@ def home(request):
 
 
 def about(request):
-    return render(request,"about.html")
+    return render(request, "about.html")
 
 
 def privacy(request):
@@ -15,4 +30,4 @@ def privacy(request):
 
 
 def legals(request):
-    return render(request,"legals.html")
+    return render(request, "legals.html")

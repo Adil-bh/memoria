@@ -1,8 +1,31 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.validators import MinLengthValidator
+from django.utils import timezone
+
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
-class CustomUser(AbstractUser):
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, first_name, last_name, email, password ):
+        if not email:
+            raise ValueError("Vous devez entrer une adresse email.")
+        email = self.normalize_email(email)
+        user = self.model(username=username, first_name=first_name, last_name=last_name, email=email)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, username, email, password):
+        user = self.create_user(username=username, email=email, password=password)
+        user.is_staff = True
+        user.is_admin = True
+        user.save()
+        return user
+
+
+class CustomUser(AbstractBaseUser):
     difficulty_choices = (
         ("EASY", "Facile"),
         ("MEDIUM", "Moyen"),
@@ -10,6 +33,24 @@ class CustomUser(AbstractUser):
         ("EXPERT", "Expert")
 
     )
+    username_validator = UnicodeUsernameValidator()
+    username = models.CharField(_("username"), max_length=15, unique=True, blank=False,
+                                validators=[username_validator, MinLengthValidator(4)],
+                                error_messages={
+                                    "unique": "Nom d'utilisateur déjà utilisé",
+                                })
+    first_name = models.CharField(_("first name"), max_length=60, blank=False,)
+    last_name = models.CharField(_("last name"), max_length=60, blank=False)
+    email = models.EmailField(max_length=255, blank=False, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False,
+                                   help_text="Designates whether the user can log into this admin site.")
+    is_admin = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+    objects = CustomUserManager()
 
     win_streak = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
     date_last_question = models.DateField(blank=True, null=True)
