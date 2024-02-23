@@ -5,6 +5,11 @@
     <title>Créer un compte</title>
 </head>
 <body>
+    {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}

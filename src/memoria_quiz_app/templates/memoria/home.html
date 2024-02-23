@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <title>Accueil</title>
 </head>
 <body>
     {% for message in messages %}
@@ -10,10 +10,7 @@
             {{ message }}
         </div>
     {% endfor %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Se connecter">
-    </form>
+
+<h1>Blog</h1>
 </body>
 </html>

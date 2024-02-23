@@ -29,4 +29,5 @@ urlpatterns = [
     path('legals/', views.legals, name="legals"),
     path("account/", include("django.contrib.auth.urls")),
     path('account/signup/', signup, name="signup"),
+    path('activate/<uidb64>/<token>', views.activate, name='activate'),
 ]
