@@ -19,6 +19,7 @@ from django.urls import path, include
 
 from memoria_quiz_app import views
 from memoria_quiz_app.views import signup
+import django.contrib.auth.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +27,6 @@ urlpatterns = [
     path('about/', views.about, name="about"),
     path('privacy/', views.privacy, name="privacy"),
     path('legals/', views.legals, name="legals"),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path('accounts/signup/', signup, name="signup"),
+    path("account/", include("django.contrib.auth.urls")),
+    path('account/signup/', signup, name="signup"),
 ]
-import django.contrib.auth.urls
