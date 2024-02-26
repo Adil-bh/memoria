@@ -131,8 +131,8 @@ MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "memoria_quiz_app.CustomUser"
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'memoria:home'
+LOGOUT_REDIRECT_URL = 'memoria:login'
 
 #Email Settings
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')

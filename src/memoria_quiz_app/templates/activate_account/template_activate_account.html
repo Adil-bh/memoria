@@ -3,5 +3,5 @@ Salut {{ user }},
 
 Clique sur ce lien pour confirmer ton inscription :
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+http://{{ domain }}{% url 'memoria:activate' uidb64=uid token=token %}
 {% endautoescape %}

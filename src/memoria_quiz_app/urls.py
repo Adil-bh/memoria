@@ -17,8 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from memoria_quiz_app import views
+from memoria_quiz_app.views import signup, SubjectEdit
+import django.contrib.auth.urls
+
+app_name = "memoria"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('memoria/', include("memoria_quiz_app.urls")),
+    path('', views.home, name="home"),
+    path('about/', views.about, name="about"),
+    path('privacy/', views.privacy, name="privacy"),
+    path('legals/', views.legals, name="legals"),
+    path("account/", include("django.contrib.auth.urls")),
+    path('account/signup/', signup, name="signup"),
+    path('activate/<uidb64>/<token>', views.activate, name='activate'),
+    path('subjects/index/', views.subject_choice, name='index-subjects'),
+    path('subjects/edit/<int:pk>', SubjectEdit.as_view(), name="edit-subjects"),
 ]
