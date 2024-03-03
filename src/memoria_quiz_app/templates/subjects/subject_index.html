@@ -5,5 +5,19 @@
 {% endblock %}
 
 {% block content %}
-
+    <h1>Choisissez un thème</h1>
+    <a href="{% url 'memoria:quiz' subject='subject1' %}">
+        <input type="button" value="Thème 1">
+    </a>
+    <div class="win_streak">Série en cours : {{ user.win_streak_subject1 }}</div>
+    <br>
+    <a href="{% url 'memoria:quiz' subject='subject2' %}">
+        <input type="button" value="Thème 2">
+    </a>
+<div class="win_streak">Série en cours : {{ user.win_streak_subject2 }}</div>
+    <br>
+    <a href="{% url 'memoria:quiz' subject='general_culture' %}">
+        <input type="button" value="Culture Générale">
+    </a>
+    <div class="win_streak">Série en cours : {{ user.win_streak_general_culture }}</div>
 {% endblock %}

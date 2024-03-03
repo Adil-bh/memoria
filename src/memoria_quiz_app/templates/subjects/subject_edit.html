@@ -6,6 +6,7 @@
 
 {% block content %}
     {{ user }}
+    <h3>Attention si vous changez de thème votre série de victoires sera remise à 0</h3>
     {% if request.user.id == user.id %}
         <form method="POST">
             {% csrf_token %}

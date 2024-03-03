@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Thème 1</title>
+{% endblock %}
+
+{% block content %}
+    <br>{{ user }}<br>
+    <h1>{{ user.subject1 }}</h1>
+
+    {% if question.is_question_answered_subject1 %}
+        <h2>Question du jour complétée</h2>
+        <div>
+        {{ question.question_subject1 }}<br>
+        {% for option in options %}
+            <input type="radio" id="{{ option_answered }}" name="user_answer_subject1" value="{{ option }}" disabled>
+            <label for="{{ option }}">{{ option }}</label><br>
+        {% endfor %}
+        </div>
+        <div>
+            <h4>Vous avez répondu: {{ question.user_answer_subject1 }}</h4>
+            <h3>La bonne réponse est: {{ question.expected_answer_subject1 }}</h3>
+        </div>
+
+    {% else %}
+        <div>
+            <h2>Question du jour</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ question.question_subject1 }}<br>
+            {% if question.question_type_general_culture == 1 %}
+                {% for option in question.options_subject1 %}
+                    <input type="radio" id="{{ option }}" name="user_answer_subject1" value="{{ option }}">
+                    <label for="{{ option }}">{{ option }}</label><br>
+                {% endfor %}
+            {% else %}
+               <!-- <input type="text" name="user_answer"> -->
+            {% endif %}
+            <input type="submit" value="Enregistrer">
+        </form>
+        </div>
+    {% endif %}
+{% endblock %}
