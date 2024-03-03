@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from memoria_quiz_app import views
-from memoria_quiz_app.views import signup, SubjectEdit
+from memoria_quiz_app.views import signup, SubjectEdit, QuizGenerator, SubjectChoice
 import django.contrib.auth.urls
 
 app_name = "memoria"
@@ -31,6 +31,7 @@ urlpatterns = [
     path("account/", include("django.contrib.auth.urls")),
     path('account/signup/', signup, name="signup"),
     path('activate/<uidb64>/<token>', views.activate, name='activate'),
-    path('subjects/index/', views.subject_choice, name='index-subjects'),
+    path('subjects/index/', SubjectChoice.as_view(), name='index-subjects'),
     path('subjects/edit/<int:pk>', SubjectEdit.as_view(), name="edit-subjects"),
+    path('subjects/quiz/<str:subject>', QuizGenerator.as_view(), name='quiz')
 ]

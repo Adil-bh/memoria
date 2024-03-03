@@ -53,8 +53,12 @@ class CustomUser(AbstractBaseUser):
     USERNAME_FIELD = "username"
     objects = CustomUserManager()
 
-    win_streak = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
-    date_last_question = models.DateField(blank=True, null=True)
+    win_streak_subject1 = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
+    win_streak_subject2 = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
+    win_streak_general_culture = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
+    date_last_question_subject1 = models.DateField(blank=True, null=True)
+    date_last_question_subject2 = models.DateField(blank=True, null=True)
+    date_last_question_general_culture = models.DateField(blank=True, null=True)
 
     subject1 = models.CharField(_("Thème 1"), blank=True, max_length=255)
     subject2 = models.CharField(_("Thème 2"), blank=True, null=True, max_length=255)
@@ -66,12 +70,10 @@ class CustomUser(AbstractBaseUser):
     number_answered_questions_s1 = models.PositiveIntegerField(blank=True, default=0)
     number_answered_questions_s2 = models.PositiveIntegerField(blank=True, default=0)
     number_answered_questions_general_culture = models.PositiveIntegerField(blank=True, default=0)
-    total_answered_questions = models.PositiveIntegerField(blank=True, default=0)
 
     number_valid_answers_s1 = models.PositiveIntegerField(blank=True, default=0)
     number_valid_answers_s2 = models.PositiveIntegerField(blank=True, default=0)
     number_valid_answers_general_culture = models.PositiveIntegerField(blank=True, default=0)
-    total_valid_answers = models.PositiveIntegerField(blank=True, default=0)
 
     emoji_subject1 = models.CharField(blank=True, max_length=100)
     emoji_subject2 = models.CharField(blank=True, max_length=100)
@@ -86,24 +88,45 @@ class CustomUser(AbstractBaseUser):
         except ZeroDivisionError:
             return None
 
+    @property
+    def total_answered_questions(self):
+        return self.number_answered_questions_s1 + self.number_answered_questions_s2 + self.number_answered_questions_general_culture
+
+    @property
+    def total_valid_answers(self):
+        return self.number_valid_answers_s1 + self.number_valid_answers_s2 + self.number_valid_answers_general_culture
+
     def get_absolute_url(self):
         return reverse('memoria:home')
 
 
-class Question(models.Model):
-    question_type = (
-        ("QCM", "QCM"),
-        ("Open_question", "Question ouverte")
-    )
-    user = models.ForeignKey("CustomUser", on_delete=models.CASCADE, null=True, blank=True)
-    question = models.TextField(blank=True, null=False)
-    date_last_question = models.DateField(auto_now=True)
-    question_type = models.CharField(question_type, choices=question_type, max_length=20)
-    expected_answer = models.TextField(blank=True)
-
-
-class Answer(models.Model):
+class Questions(models.Model):
     user = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True)
-    question = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True)
-    user_answer = models.TextField(blank=True)
-    is_answer_correct = models.BooleanField(default=False)
+    question_subject1 = models.TextField(blank=True, null=False)
+    question_subject2 = models.TextField(blank=True, null=False)
+    question_general_culture = models.TextField(blank=True, null=False)
+    options_subject1 = models.CharField(max_length=500, blank=True, null=True)
+    options_subject2 = models.CharField(max_length=500, blank=True, null=True)
+    options_general_culture = models.CharField(max_length=500, blank=True, null=True)
+    question_type_subject1 = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
+    question_type_subject2 = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
+    question_type_general_culture = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
+    expected_answer_subject1 = models.TextField(blank=True)
+    expected_answer_subject2 = models.TextField(blank=True)
+    expected_answer_general_culture = models.TextField(blank=True)
+    user_answer_subject1 = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur pour le thème 1")
+    user_answer_subject2 = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur pour le thème 2")
+    user_answer_general_culture = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur pour la culture générale")
+    is_answer_valid_subject1 = models.BooleanField(default=False)
+    is_answer_valid_subject2 = models.BooleanField(default=False)
+    is_answer_valid_general_culture = models.BooleanField(default=False)
+    is_question_answered_subject1 = models.BooleanField(default=False)
+    is_question_answered_subject2= models.BooleanField(default=False)
+    is_question_answered_general_culture = models.BooleanField(default=False)
+    date_answered = models.DateTimeField(default=timezone.now)
+
+
+# class Answer(models.Model):
+#     user = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True)
+#     question = models.ForeignKey("Questions", on_delete=models.SET_NULL, null=True)
+
