@@ -9,9 +9,14 @@
 <body>
     <nav>
         <a href="{% url 'memoria:home' %}">Accueil</a>
+        {% if not request.user.is_authenticated %}
+            <a href="{% url 'memoria:login' %}">Connexion</a>
+            <a href="{% url 'memoria:signup' %}">Inscription</a>
+        {% endif %}
         {% if request.user.is_authenticated %}
             <a href="{% url 'memoria:index-subjects' %}">Quiz</a>
             <a href="{% url 'memoria:edit-subjects' pk=user.pk %}">Edit Thèmes</a>
+            <a href="{% url 'memoria:logout' %}">Déconnexion</a>
         {% endif %}
     </nav>
 
