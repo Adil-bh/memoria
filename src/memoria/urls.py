@@ -20,5 +20,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('memoria/', include('django.contrib.auth.urls')),
     path('memoria/', include("memoria_quiz_app.urls")),
 ]

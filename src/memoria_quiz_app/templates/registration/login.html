@@ -1,19 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
     <title>Connexion</title>
-</head>
-<body>
-    {% for message in messages %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
+{% endblock %}
+
+{% block content %}
+{% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        <strong>Nom d'utilisateur</strong> ou <strong>mot de passe</strong> incorrect.
+    </div>
+{% endif %}
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Se connecter">
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">👤</span>
+            {{ form.username|add_class:"form-control"|attr:"placeholder:Nom d'utilisateur"}}
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-text">🔒</span>
+          {{ form.password|add_class:"form-control"|attr:"placeholder:Mot de passe" }}
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="login_button">Se connecter</button>
     </form>
-</body>
-</html>
+    <p>Pas encore de compte ? <a href="{% url 'memoria:signup' %}">Inscrivez-vous</a></p>
+    <p><a href="{% url 'memoria:reset_password' %}">Mot de passe oublié ?</a></p>
+{% endblock %}
