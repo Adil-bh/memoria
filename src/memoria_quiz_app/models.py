@@ -1,7 +1,8 @@
+from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import MinLengthValidator
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, dateformat
 
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
@@ -9,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
+
     def create_user(self, username, first_name, last_name, email, password):
         if not email:
             raise ValueError("Vous devez entrer une adresse email.")
@@ -18,16 +20,18 @@ class CustomUserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, username, email, password):
-        user = self.create_user(username=username, email=email, password=password)
+    def create_superuser(self, username, email, password, first_name, last_name):
+        user = self.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
         user.is_staff = True
         user.is_admin = True
+        user.is_superuser = True
         user.save()
         return user
 
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     difficulty_choices = (
+        (None, "Choisissez une difficulté"),
         ("EASY", "Facile"),
         ("MEDIUM", "Moyen"),
         ("HARD", "Difficile"),
@@ -47,10 +51,12 @@ class CustomUser(AbstractBaseUser):
     is_staff = models.BooleanField(default=False,
                                    help_text="Designates whether the user can log into this admin site.")
     is_admin = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
     objects = CustomUserManager()
 
     win_streak_subject1 = models.PositiveIntegerField(blank=True, auto_created=True, default=0)
@@ -60,8 +66,8 @@ class CustomUser(AbstractBaseUser):
     date_last_question_subject2 = models.DateField(blank=True, null=True)
     date_last_question_general_culture = models.DateField(blank=True, null=True)
 
-    subject1 = models.CharField(_("Thème 1"), blank=True, max_length=255)
-    subject2 = models.CharField(_("Thème 2"), blank=True, null=True, max_length=255)
+    subject1 = models.CharField(_("Thème 1"), blank=False, null=True, max_length=255)
+    subject2 = models.CharField(_("Thème 2"), blank=False, null=True, max_length=255)
     difficulty_subject1 = models.CharField(_("Difficulté Thème 1"), choices=difficulty_choices, max_length=50)
     difficulty_subject2 = models.CharField(_("Difficulté Thème 2"), choices=difficulty_choices, max_length=50)
     difficulty_general_culture = models.CharField(_("Difficulté Culture générale"), choices=difficulty_choices,
@@ -102,31 +108,14 @@ class CustomUser(AbstractBaseUser):
 
 class Questions(models.Model):
     user = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True)
-    question_subject1 = models.TextField(blank=True, null=False)
-    question_subject2 = models.TextField(blank=True, null=False)
-    question_general_culture = models.TextField(blank=True, null=False)
-    options_subject1 = models.CharField(max_length=500, blank=True, null=True)
-    options_subject2 = models.CharField(max_length=500, blank=True, null=True)
-    options_general_culture = models.CharField(max_length=500, blank=True, null=True)
-    question_type_subject1 = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
-    question_type_subject2 = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
-    question_type_general_culture = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
-    expected_answer_subject1 = models.TextField(blank=True)
-    expected_answer_subject2 = models.TextField(blank=True)
-    expected_answer_general_culture = models.TextField(blank=True)
-    user_answer_subject1 = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur pour le thème 1")
-    user_answer_subject2 = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur pour le thème 2")
-    user_answer_general_culture = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur pour la culture générale")
-    is_answer_valid_subject1 = models.BooleanField(default=False)
-    is_answer_valid_subject2 = models.BooleanField(default=False)
-    is_answer_valid_general_culture = models.BooleanField(default=False)
-    is_question_answered_subject1 = models.BooleanField(default=False)
-    is_question_answered_subject2= models.BooleanField(default=False)
-    is_question_answered_general_culture = models.BooleanField(default=False)
-    date_answered = models.DateTimeField(default=timezone.now)
 
-
-# class Answer(models.Model):
-#     user = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True)
-#     question = models.ForeignKey("Questions", on_delete=models.SET_NULL, null=True)
-
+    question = models.TextField(blank=True, null=False, help_text="Question")
+    subject = models.CharField(max_length=255, blank=True, null=True, help_text="Sujet de la question")
+    options = models.CharField(max_length=500, blank=True, null=True, help_text="Options de  réponse pour la question")
+    question_type = models.BooleanField(default=True, help_text="True if question is a multiple choice question")
+    expected_answer = models.TextField(blank=True, null=True, help_text="Réponse attendue")
+    explication_answer = models.TextField(blank=True, null=True, help_text="Explication de la réponse")
+    user_answer = models.TextField(blank=True, verbose_name="Réponse de l'utilisateur")
+    is_answer_valid = models.BooleanField(default=False, help_text="True if user's answer is valid")
+    is_question_answered = models.BooleanField(default=False, help_text="True if user has answered the question")
+    date_answered = models.DateField(default=None, blank=True, null=True, help_text="Date when the question was answered")

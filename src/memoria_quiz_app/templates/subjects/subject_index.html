@@ -6,18 +6,28 @@
 
 {% block content %}
     <h1>Choisissez un thème</h1>
-    <a href="{% url 'memoria:quiz' subject='subject1' %}">
-        <input type="button" value="Thème 1">
-    </a>
-    <div class="win_streak">Série en cours : {{ user.win_streak_subject1 }}</div>
+    <div class="subject" id="subject1">
+        <a href="{% url 'memoria:quiz' subject='subject1' %}">
+            <button type="button" class="btn btn-warning btn-lg">{{ user.subject1 }}</button>
+        </a>
+        <p class="win_streak">Série en cours : {{ user.win_streak_subject1 }}</p>
+    </div>
+
     <br>
-    <a href="{% url 'memoria:quiz' subject='subject2' %}">
-        <input type="button" value="Thème 2">
-    </a>
-<div class="win_streak">Série en cours : {{ user.win_streak_subject2 }}</div>
+
+    <div class="subject" id="subject2">
+        <a href="{% url 'memoria:quiz' subject='subject2' %}">
+            <button type="button" class="btn btn-warning btn-lg">{{ user.subject2|truncatewords:3 }}</button>
+        </a>
+        <p class="win_streak">Série en cours : {{ user.win_streak_subject2 }}</p>
+    </div>
+
     <br>
-    <a href="{% url 'memoria:quiz' subject='general_culture' %}">
-        <input type="button" value="Culture Générale">
-    </a>
-    <div class="win_streak">Série en cours : {{ user.win_streak_general_culture }}</div>
+
+    <div class="subject" id="general_culture">
+        <a href="{% url 'memoria:quiz' subject='general_culture' %}">
+            <button type="button" class="btn btn-warning btn-lg">Culture Générale</button>
+        </a>
+        <p class="win_streak">Série en cours : {{ user.win_streak_general_culture }}</p>
+    </div>
 {% endblock %}

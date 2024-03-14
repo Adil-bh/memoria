@@ -1,19 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
     <title>Créer un compte</title>
-</head>
-<body>
-    {% for message in messages %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
+{% endblock %}
+
+{% block content %}
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="S'inscrire">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="username_signup">👤</span>
+            {{ form.username|add_class:"form-control"|attr:"placeholder:Nom d'utilisateur" }}
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="email">📧</span>
+            {{ form.email|add_class:"form-control"|attr:"placeholder:Email" }}
+        </div>
+
+        <div class="input-group mb-3">
+            {{ form.first_name|add_class:"form-control"|attr:"placeholder:Prénom" }}
+        </div>
+
+        <div class="input-group mb-3">
+            {{ form.last_name|add_class:"form-control"|attr:"placeholder:Nom de famille" }}
+        </div>
+
+        <div class="input-group mb-3">
+
+            {{ form.password1|add_class:"form-control"|attr:"placeholder:Mot de passe"}}
+            <span class="input-group-text" id="password-tooltip" data-html="true" data-tooltip="Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.
+            Votre mot de passe doit contenir au minimum 8 caractères.
+            Votre mot de passe ne peut pas être un mot de passe couramment utilisé.
+            Votre mot de passe ne peut pas être entièrement numérique.">ℹ️</span>
+        </div>
+
+        <div class="input-group mb-3">
+            {{ form.password2|add_class:"form-control"|attr:"placeholder:Confirmer le mot de passe"}}
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="signup_button">S'inscrire</button>
     </form>
-</body>
-</html>
+    <p>Déjà un compte ? <a href="{% url 'memoria:login' %}">Connectez-vous</a></p>
+
+
+
+{% endblock %}
+

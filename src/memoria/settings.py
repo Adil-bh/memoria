@@ -30,7 +30,6 @@ DEBUG = bool(os.getenv("DEBUG", False))
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(" ")
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'livereload',
+    'widget_tweaks',
     'django.contrib.staticfiles',
     'memoria_quiz_app',
 ]
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'memoria.urls'
@@ -59,6 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / "templates",
+                 BASE_DIR / "memoria_quiz_app" / "templates",
                  BASE_DIR / "memoria_quiz_app" / "templates" / "memoria"],
         'APP_DIRS': True,
         'OPTIONS': {

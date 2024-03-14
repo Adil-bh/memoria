@@ -5,5 +5,20 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Blog</h1>
+    <h2 id="hometext">Testez vos connaissances en répondant à une question quotidienne <br> sur les thématiques de votre choix</h2>
+{% if request.user.is_authenticated %}
+    <h2 class="welcome-message">Bienvenue {{ user.username }}</h2>
+    {% if user.subject1 == NULL or user.subject2 == NULL %}
+    <h5>Choisissez un thème pour commencer</h5>
+    <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='{% url 'memoria:edit-subjects' pk=user.pk %}'">Choisir un thème</button>
+    {% else %}
+    <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='{% url 'memoria:index-subjects' %}'">Jouer</button>
+    {% endif %}
+{% else %}
+    <h5>Connectez-vous ou inscrivez-vous pour jouer</h5>
+<div class="button-container">
+    <button type="button"  id="left-button" class="btn btn-primary btn-lg" onclick="window.location.href='{% url 'memoria:login' %}'">Se connecter</button>
+    <button type="button" id="right-button" class="btn btn-primary btn-lg" onclick="window.location.href='{% url 'memoria:signup' %}'">S'inscrire</button>
+</div>
+{% endif %}
 {% endblock %}

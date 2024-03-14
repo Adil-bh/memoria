@@ -1,17 +1,50 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}
     <title>Modifier thème</title>
 {% endblock %}
 
 {% block content %}
-    {{ user }}
-    <h3>Attention si vous changez de thème votre série de victoires sera remise à 0</h3>
+    <h4>N'hésitez pas à être exhaustifs sur la précision des sujets</h4>
+    <p>Utilisez plusieurs mots clés</p>
+    <p class="warning_score">Attention si vous changez de thème/difficulté votre série de victoires sera remise à 0</p>
     {% if request.user.id == user.id %}
+    <div class="form-group">
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Enregistrer">
+
+            <div class="subject_title">
+            <strong>Thème 1 :</strong>
+            </div>
+            <div class="subject_form">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default-subject1">🎰</span>
+                        {{ form.subject1|add_class:"form-control"|attr:"placeholder: Ex. : Histoire de France" }}
+                    </div>
+                    {{ form.difficulty_subject1|add_class:"form-select" }}
+            </div>
+
+            <div class="subject_title">
+            <strong>Thème 2 :</strong>
+            </div>
+            <div class="subject_form">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default-subject2">🎰</span>
+                    {{ form.subject2|add_class:"form-control" }}
+                </div>
+                {{ form.difficulty_subject2|add_class:"form-select" }}
+            </div>
+
+            <div class="subject_title">
+                <strong>Culture générale : </strong> Difficulté
+            </div>
+            <div class="subject_form">
+                {{ form.difficulty_general_culture|add_class:"form-select" }}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Enregistrer</button>
         </form>
+    </div>
     {% endif %}
 {% endblock %}
