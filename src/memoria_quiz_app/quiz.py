@@ -47,17 +47,6 @@ def generate_question(user, subject, difficulty):
     return json.dumps({"questions": questions_list}, ensure_ascii=False).encode('utf-8')
 
 
-    # question = json_response['question']
-    # question_type = json_response['type']
-    # explication = json_response.get('explanation')
-    #Si la question est de type QCM
-    # if question_type == "QCM":
-    #     expected_answer = json_response['answer']
-    #     options = json_response.get('options')
-    #     return json.dumps({"question": question, "type": question_type, "options": options, "answer": expected_answer, "explication": explication},
-    #                   ensure_ascii=False).encode('utf-8')
-
-
 def question_creation(user: object, subject: str, question: str, question_type: str, options: list, explication: str, expected_answer: str):
     question = Questions(user=user,
                          question=question,
@@ -123,7 +112,7 @@ def select_difficulty(user: object, subject: str):
 
 
 # Vérifier si l'utilisateur peut jouer
-def can_user_play(url_subject: str, subject: str, date_last_question: datetime.date):
+def user_can_play(url_subject: str, subject: str, date_last_question: datetime.date):
     if url_subject == subject and date_last_question == None:
         return True
     elif url_subject == subject and date_last_question < datetime.date.today():
@@ -166,7 +155,7 @@ def return_subject_quiz_url(subject: str):
 
 
 def format_answer_options(subject: str, context: dict):
-        return ast.literal_eval(context["question"].options_subject1)
+    return ast.literal_eval(context["question"].options_subject1)
 
 
 def return_subject_question_type(question ,subject):

@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 
 from memoria_quiz_app.forms import UserRegistrationForm, UserSubjectsForm, UserQuizForm
 from .models import CustomUser, Questions
-from .quiz import generate_question, check_answer_and_scoring, can_user_play, reset_win_streak, \
+from .quiz import generate_question, check_answer_and_scoring, user_can_play, reset_win_streak, \
     return_subject_quiz_page, \
     format_answer_options, reset_is_answered_question_bool, select_difficulty, user_has_question, \
     return_subject_question_type, question_creation, return_subject_quiz_url
@@ -111,6 +111,7 @@ class SubjectEdit(UpdateView):
     template_name = "subjects/subject_edit.html"
     fields = ["subject1", "difficulty_subject1", "subject2", "difficulty_subject2", "difficulty_general_culture", ]
 
+    @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         current_user = request.user.id
         user_to_edit = CustomUser.objects.get(pk=self.kwargs['pk']).pk
@@ -118,7 +119,7 @@ class SubjectEdit(UpdateView):
             self.object = self.get_object()
             return super().get(request, *args, **kwargs)
         else:
-            messages.error(request, "Accès refusé")
+            messages.error(request, "Erreur")
             return redirect("memoria:index-subjects")
 
     def post(self, request, *args, **kwargs):
@@ -209,10 +210,6 @@ class SubjectEdit(UpdateView):
             return render(request, "memoria/subject_edit.html", context={"form": form})
 
 
-def subject_statistics(request):
-    pass
-
-
 # Quizz creation with OpenAI API
 class QuizView(CreateView):
     model = Questions
@@ -235,7 +232,7 @@ class QuizView(CreateView):
             return redirect("memoria:index-subjects")
 
         # Vérifier si l'utilisateur a déjà répondu à une question sur le sujet 1 aujourd'hui
-        if can_user_play(url_subject, "subject1", user_to_ask.date_last_question_subject1):
+        if user_can_play(url_subject, "subject1", user_to_ask.date_last_question_subject1):
             question = Questions.objects.filter(user=user_to_ask,
                                                 subject="subject1",
                                                 is_question_answered=False).first()
@@ -247,7 +244,7 @@ class QuizView(CreateView):
             return render(request, "quiz_page/quiz_subject1_page.html", context)
 
         # Vérifier si l'utilisateur a déjà répondu à une question sur le sujet 2 aujourd'hui
-        elif can_user_play(url_subject, "subject2", user_to_ask.date_last_question_subject2):
+        elif user_can_play(url_subject, "subject2", user_to_ask.date_last_question_subject2):
             question = Questions.objects.filter(user=user_to_ask,
                                                 subject="subject2",
                                                 is_question_answered=False).first()
@@ -259,7 +256,7 @@ class QuizView(CreateView):
             return render(request, "quiz_page/quiz_subject2_page.html", context)
 
         # Vérifier si l'utilisateur a déjà répondu à une question sur la culture générale aujourd'hui
-        elif can_user_play(url_subject, "general_culture", user_to_ask.date_last_question_general_culture):
+        elif user_can_play(url_subject, "general_culture", user_to_ask.date_last_question_general_culture):
             question = Questions.objects.filter(user=user_to_ask,
                                                 subject="general_culture",
                                                 is_question_answered=False).first()
@@ -332,10 +329,8 @@ class QuizView(CreateView):
         context["form"] = form
 
         # Renvoyer la page de quiz avec la réponse correcte
-        #page_to_return = return_subject_quiz_page(self.kwargs['subject'])
         url = return_subject_quiz_url(self.kwargs['subject'])
         return HttpResponseRedirect(f'{url}', context)
-        #return render(request, f"{page_to_return}", context)
 
 
 # Homepage

@@ -20,7 +20,7 @@
             <div class="subject_form">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default-subject1">🎰</span>
-                        {{ form.subject1|add_class:"form-control"|attr:"placeholder: Ex. : Histoire de France" }}
+                        {{ form.subject1|add_class:"form-control"|attr:"placeholder: Ex. : Football" }}
                     </div>
                     {{ form.difficulty_subject1|add_class:"form-select" }}
             </div>
@@ -31,9 +31,9 @@
             <div class="subject_form">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default-subject2">🎰</span>
-                    {{ form.subject2|add_class:"form-control" }}
+                    {{ form.subject2|add_class:"form-control"|attr:"placeholder: Ex. : Nutrition" }}
                 </div>
-                {{ form.difficulty_subject2|add_class:"form-select" }}
+                {{ form.difficulty_subject2|add_class:"form-select"}}
             </div>
 
             <div class="subject_title">
@@ -43,7 +43,7 @@
                 {{ form.difficulty_general_culture|add_class:"form-select" }}
             </div>
             <br>
-            <button type="submit" class="btn btn-success">Enregistrer</button>
+            <button type="submit" class="btn btn-success" id="save-subjects-button">Enregistrer</button>
         </form>
     </div>
     {% endif %}

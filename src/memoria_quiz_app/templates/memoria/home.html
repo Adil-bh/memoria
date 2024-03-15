@@ -6,6 +6,7 @@
 
 {% block content %}
     <h2 id="hometext">Testez vos connaissances en répondant à une question quotidienne <br> sur les thématiques de votre choix</h2>
+    <p>Questions et réponses générées par ChatGPT</p>
 {% if request.user.is_authenticated %}
     <h2 class="welcome-message">Bienvenue {{ user.username }}</h2>
     {% if user.subject1 == NULL or user.subject2 == NULL %}

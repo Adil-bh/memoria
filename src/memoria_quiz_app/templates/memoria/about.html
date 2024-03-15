@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>À propos</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+    <title>À propos</title>
+{% endblock %}
+
+{% block content %}
+    <h2>À propos</h2>
+    <p>Memoria est une application web qui vous permet de tester vos connaissances en répondant à une question quotidienne sur les thématiques de votre choix.<br> Les questions et réponses sont générées par ChatGPT.</p>
+    <p>Donc certaines réponses peuvent être erronnées et/ou pas à jour. En cas de doutes vérifiez. </p>
+{% endblock %}
+```
