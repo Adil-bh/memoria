@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Thème 1</title>
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'memoria:index-subjects' %}">
+    <button type="button" class="btn btn-outline-secondary" style="position: absolute; top: 80px; left: 20px; padding: 5px 30px; font-size:25px; z-index:900;">
+        ←
+    </button>
+    </a>
+
+
+    <h1>{{ user.subject1 }}</h1>
+
+    <!-- Si la question a déjà été répondue -->
+    {% if question.is_question_answered %}
+        <h2>Question du jour complétée</h2>
+        {{ question.question }}<br>
+
+        <div class="radio-option">
+        {% if question.question_type == 1 %}
+            {% for option in options %}
+                {% if option == question.user_answer %}
+                <div class="container">
+                    <label for="{{ option }}">
+                        <input type="radio" class="radio-label" id="{{ option_answered }}" name="user_answer" value="{{ option }}" checked>
+                        <span>{{ option }}</span>
+                    </label>
+                </div>
+                {% else %}
+                <div class="container">
+                    <label for="{{ option }}">
+                        <input type="radio" class="radio-label" id="{{ options }}" name="user_answer" value="{{ option }}">
+                        <span>{{ option }}</span>
+                    </label>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+        <div>
+            <h4 id="user_answer">Vous avez répondu : {{ question.user_answer }}</h4>
+
+            {% if question.is_answer_valid == 1 %}
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+              <div class="evaluation_answer">
+                  <strong>Bravo ! </strong> Vous avez trouvé la bonne réponse!
+                  <h3>La bonne réponse était : {{ question.expected_answer }} <br></h3>
+              </div>
+            </div>
+
+            {% else %}
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <div class="evaluation_answer">
+                    <p>Dommage ! Vous n'avez pas trouvé la bonne réponse !</p>
+                    <h3>La bonne réponse était : {{ question.expected_answer }} <br><br></h3>
+                </div>
+            </div>
+            {% endif %}
+
+
+            {% if question.explication_answer is not null and question.question_type == 1 %}
+                <h4 id="explanation_answer">{{ question.explication_answer }}</h4>
+            {% endif %}
+        </div>
+
+    <!-- Si la question n'a pas encore été répondue -->
+    {% else %}
+        <div>
+        <h2>Question du jour</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ question.question }}<br>
+                {% if question.question_type == 1 %}
+                {% for option in options %}
+                <div class="container">
+                    <label for="{{ option }}">
+                        <input type="radio" class="radio-label" id="{{ option }}" name="user_answer" value="{{ option }}">
+                        <span>{{ option }}</span>
+                    </label>
+                </div>
+                    {% endfor %}
+                {% else %}
+    <!--                <input type="text" name="user_answer_subject1">-->
+                {% endif %}
+                <button type="submit" class="btn btn-success" id="submit_answer">Valider</button>
+
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

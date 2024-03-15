@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Quiz</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Choisissez un thème</h1>
+    <div class="subject" id="subject1">
+        <a href="{% url 'memoria:quiz' subject='subject1' %}">
+            <button type="button" class="btn btn-warning btn-lg">{{ user.subject1 }}</button>
+        </a>
+        <p class="win_streak">Série en cours : {{ user.win_streak_subject1 }}</p>
+    </div>
+
+    <br>
+
+    <div class="subject" id="subject2">
+        <a href="{% url 'memoria:quiz' subject='subject2' %}">
+            <button type="button" class="btn btn-warning btn-lg">{{ user.subject2|truncatewords:3 }}</button>
+        </a>
+        <p class="win_streak">Série en cours : {{ user.win_streak_subject2 }}</p>
+    </div>
+
+    <br>
+
+    <div class="subject" id="general_culture">
+        <a href="{% url 'memoria:quiz' subject='general_culture' %}">
+            <button type="button" class="btn btn-warning btn-lg">Culture Générale</button>
+        </a>
+        <p class="win_streak">Série en cours : {{ user.win_streak_general_culture }}</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Mentions légales</title>
+{% endblock %}
+
+{% block content %}
+<style>
+    .content {
+        width: 50%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<h1>Mentions légales</h1>
+    <div class="content">
+        <h2>Informations légales</h2>
+        <p>Le présent site est édité par Adil.B</p>
+        <p>Contact : <a href="mailto:memoria.quiz.app@gmail.com">memoria.quiz.app@gmail.com</a></p>
+    </div>
+
+
+    <div class="content">
+        <h2>Propriété intellectuelle</h2>
+        <p>Le contenu de ce site web, incluant mais non limité aux textes, images, logos, vidéos, etc., est protégé par les lois sur la propriété intellectuelle et est la propriété exclusive de MemorIA ou de ses partenaires. Toute reproduction, distribution ou utilisation sans autorisation préalable est strictement interdite.</p>
+    </div>
+
+    <div class="content">
+        <h2>Responsabilité</h2>
+        <p>Malgré tout le soin apporté à la réalisation et à la mise à jour du contenu de ce site, MemorIA décline toute responsabilité quant à l'exactitude, l'exhaustivité ou la pertinence des informations fournies. MemorIA se réserve également le droit de modifier, supprimer ou ajouter du contenu sans préavis.</p>
+    </div>
+
+    <div class="content">
+        <h2>Liens externes</h2>
+        <p>Ce site peut contenir des liens vers des sites web tiers. MemorIA n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur contenu, leur politique de confidentialité ou leurs pratiques. L'inclusion de ces liens ne constitue en aucun cas une approbation ou une recommandation de la part de MemorIA.</p>
+    </div>
+
+    <div class="content">
+        <h2>Protection des données personnelles</h2>
+        <p>Pour en savoir plus sur la manière dont nous collectons, utilisons et protégeons vos données personnelles, veuillez consulter notre <a href="{% url 'memoria:privacy' %}">politique de confidentialité</a>.</p>
+    </div>
+{% endblock %}
