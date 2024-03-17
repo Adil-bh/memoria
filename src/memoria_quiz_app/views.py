@@ -65,7 +65,7 @@ def activateEmail(request, user, to_email):
     mail_subject = _("Activez votre compte")
     message = render_to_string("activate_account/template_activate_account.html", {
         'user': user.username,
-        'domain': get_current_site(None).domain,
+        'domain': get_current_site(None),
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
         'protocol': 'https' if request.is_secure() else 'http'
