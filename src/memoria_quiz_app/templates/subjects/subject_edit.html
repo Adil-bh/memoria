@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block title %}
     <title>Modifier thème</title>
 {% endblock %}
+
 
 {% block content %}
     <h4>N'hésitez pas à être exhaustifs sur la précision des sujets</h4>
@@ -11,7 +13,7 @@
     <p class="warning_score">Attention si vous changez de thème/difficulté votre série de victoires sera remise à 0<br>La génération des questions/réponses peut prendre une minute.</p>
     {% if request.user.id == user.id %}
     <div class="form-group">
-        <form method="POST">
+        <form method="POST" id="signupForm">
             {% csrf_token %}
 
             <div class="subject_title">
@@ -43,8 +45,14 @@
                 {{ form.difficulty_general_culture|add_class:"form-select" }}
             </div>
             <br>
-            <button type="submit" class="btn btn-success" id="save-subjects-button">Enregistrer</button>
+            <button class="btn btn-success" type="btnsubmit" name="btnsubmit"  id="spinner-button" style="margin-bottom: 2rem;">
+              <span class="spinner-border spinner-border-sm" aria-hidden="true" id="spinner" hidden></span>
+              <span role="status" id="button-text">Enregistrer</span>
+            </button>
         </form>
     </div>
     {% endif %}
+<script src="{% static 'js/app.js' %}">
+</script>
 {% endblock %}
+
