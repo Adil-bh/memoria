@@ -7,11 +7,11 @@
 
 {% block content %}
 <!-- Afficher les erreurs de formulaire -->
-    <div class="alert alert-danger" role="alert">
     {% for key, val in form.errors.items %}
+    <div class="alert alert-danger" role="alert">
         <p>{{val}}</p>
-    {% endfor %}
     </div>
+    {% endfor %}
 
     <form method="POST">
         {% csrf_token %}
