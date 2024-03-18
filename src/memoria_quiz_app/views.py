@@ -78,6 +78,7 @@ def activateEmail(request, user, to_email):
 
 
 def signup(request):
+    context = {}
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -86,10 +87,13 @@ def signup(request):
             user.save()
             activateEmail(request, user, form.cleaned_data.get('email'))
             return redirect("memoria:home")
+        else:
+            context["form"] = form
     else:
         form = UserRegistrationForm()
+        context["form"] = form
 
-    return render(request, "memoria/signup.html", context={"form": form})
+    return render(request, "memoria/signup.html", context)
 
 
 # Subject choice, edit and stats

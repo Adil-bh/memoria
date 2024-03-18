@@ -6,6 +6,13 @@
 {% endblock %}
 
 {% block content %}
+<!-- Afficher les erreurs de formulaire -->
+    <div class="alert alert-danger" role="alert">
+    {% for key, val in form.errors.items %}
+        <p>{{val}}</p>
+    {% endfor %}
+    </div>
+
     <form method="POST">
         {% csrf_token %}
         <div class="input-group mb-3">
