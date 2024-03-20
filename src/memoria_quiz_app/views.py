@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 
 from memoria_quiz_app.forms import UserRegistrationForm, UserSubjectsForm, UserQuizForm
 from .models import CustomUser, Questions
-from .quiz import generate_question, check_answer_and_scoring, user_can_play, reset_win_streak, \
+from .quiz import generate_questions, check_answer_and_scoring, user_can_play, reset_win_streak, \
     return_subject_quiz_page, \
     format_answer_options, reset_is_answered_question_bool, select_difficulty, user_has_question, \
     return_subject_question_type, question_creation, return_subject_quiz_url
@@ -149,8 +149,13 @@ class SubjectEdit(UpdateView):
                     is_question_answered=1,
                     user=user_to_edit).count() >= 20 or old_difficulty_subject1 != user_to_edit.difficulty_subject1:
                 Questions.objects.filter(subject="subject1", user=user_to_edit).delete()
-                response_data = json.loads(
-                    generate_question(user_to_edit, "subject1", user_to_edit.difficulty_subject1))
+                try:
+                    response_data = json.loads(
+                    generate_questions(user_to_edit, "subject1", user_to_edit.difficulty_subject1))
+                except Exception as e:
+                    print(f"Error: {e}")
+                    messages.error(request, "Erreur lors de la génération des questions.")
+                    return redirect("memoria:index-subjects")
                 questions_subject1 = response_data['questions']
                 for question_json in questions_subject1:
                     question = question_json['question']
@@ -169,8 +174,13 @@ class SubjectEdit(UpdateView):
                     is_question_answered=1,
                     user=user_to_edit).count() >= 20 or old_difficulty_subject2 != user_to_edit.difficulty_subject2:
                 Questions.objects.filter(subject="subject2", user=user_to_edit).delete()
-                response_data = json.loads(
-                    generate_question(user_to_edit, "subject2", user_to_edit.difficulty_subject2))
+                try:
+                    response_data = json.loads(
+                    generate_questions(user_to_edit, "subject2", user_to_edit.difficulty_subject2))
+                except Exception as e:
+                    print(f"Error: {e}")
+                    messages.error(request, "Erreur lors de la génération des questions.")
+                    return redirect("memoria:index-subjects")
                 questions_subject2 = response_data['questions']
                 for question_json in questions_subject2:
                     question = question_json['question']
@@ -190,9 +200,14 @@ class SubjectEdit(UpdateView):
                                             user=user_to_edit).exists() or
                     Questions.objects.filter(is_question_answered=1, user=user_to_edit).count() >= 20 or
                     old_difficulty_general_culture != user_to_edit.difficulty_general_culture):
-                response_data = json.loads(generate_question(user_to_edit,
+                try:
+                    response_data = json.loads(generate_questions(user_to_edit,
                                                              "general_culture",
-                                                             user_to_edit.difficulty_general_culture))
+                                                              user_to_edit.difficulty_general_culture))
+                except Exception as e:
+                    print(f"Error: {e}")
+                    messages.error(request, "Erreur lors de la génération des questions.")
+                    return redirect("memoria:index-subjects")
                 questions_general_culture = response_data['questions']
                 for question_json in questions_general_culture:
                     # print(question_json)

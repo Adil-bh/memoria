@@ -8,7 +8,7 @@ import openai
 from memoria_quiz_app.models import Questions
 
 
-def generate_question(user, subject, difficulty):
+def generate_questions(user, subject, difficulty):
     user_to_ask = user
     url_subject = subject
     if url_subject == "subject1":
@@ -18,7 +18,7 @@ def generate_question(user, subject, difficulty):
     else:
         subject = "Culture générale, gastronomie, histoire, géographie, sciences, musique, etc."
     response = openai.chat.completions.create(
-        #model="gpt-4-turbo-preview",
+        # model="gpt-4-turbo-preview",
         model="gpt-3.5-turbo",
         temperature=0.7,
         max_tokens=3000,
@@ -42,12 +42,17 @@ def generate_question(user, subject, difficulty):
     )
 
     print(response.choices[0].message.content)
-    json_response = json.loads(response.choices[0].message.content)
-    questions_list = json_response['questions']
-    return json.dumps({"questions": questions_list}, ensure_ascii=False).encode('utf-8')
+    try:
+        json_response = json.loads(response.choices[0].message.content)
+        questions_list = json_response['questions']
+        return json.dumps({"questions": questions_list}, ensure_ascii=False).encode('utf-8')
+    except:
+        print("Error in the response")
+        return None
 
 
-def question_creation(user: object, subject: str, question: str, question_type: str, options: list, explication: str, expected_answer: str):
+def question_creation(user: object, subject: str, question: str, question_type: str, options: list, explication: str,
+                      expected_answer: str):
     question = Questions(user=user,
                          question=question,
                          question_type=1 if question_type == "QCM" else 0,
@@ -123,8 +128,8 @@ def user_can_play(url_subject: str, subject: str, date_last_question: datetime.d
 
 # Reset le paramètre is_answered_question à False
 def reset_is_answered_question_bool(subject: str, question: object):
-        question.is_question_answered = False
-        question.save()
+    question.is_question_answered = False
+    question.save()
 
 
 def reset_win_streak(user: object, subject: str, new_topic: str, old_topic: str):
@@ -158,11 +163,10 @@ def format_answer_options(subject: str, context: dict):
     return ast.literal_eval(context["question"].options_subject1)
 
 
-def return_subject_question_type(question ,subject):
+def return_subject_question_type(question, subject):
     if subject == "subject1":
         return question.question_type_subject1
     elif subject == "subject2":
         return question.question_type_subject2
     else:
         return question.question_type_general_culture
-
