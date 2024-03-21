@@ -47,7 +47,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name"), max_length=60, blank=False, )
     last_name = models.CharField(_("last name"), max_length=60, blank=False)
     email = models.EmailField(max_length=255, blank=False, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False, help_text="Designates whether this user should be treated as active.")
     is_staff = models.BooleanField(default=False,
                                    help_text="Designates whether the user can log into this admin site.")
     is_admin = models.BooleanField(default=False)
