@@ -7,8 +7,7 @@ import openai
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -24,9 +23,7 @@ from dotenv import load_dotenv
 from memoria_quiz_app.forms import UserRegistrationForm, UserSubjectsForm, UserQuizForm
 from .models import CustomUser, Questions
 from .quiz import generate_questions, check_answer_and_scoring, user_can_play, reset_win_streak, \
-    return_subject_quiz_page, \
-    format_answer_options, reset_is_answered_question_bool, select_difficulty, user_has_question, \
-    return_subject_question_type, question_creation, return_subject_quiz_url
+    return_subject_quiz_page, reset_is_answered_question_bool, question_creation, return_subject_quiz_url
 from .tokens import account_activation_token
 
 load_dotenv()
@@ -54,7 +51,8 @@ def activate(request, uidb64, token):
         messages.success(request, "Merci d'avoir confirmé votre email. Vous pouvez maintenant vous connecter. ")
         return redirect("memoria:login")
     else:
-        messages.error(request, "Lien d'activation invalide.")
+        messages.success(request, "Merci d'avoir confirmé votre email. Vous pouvez maintenant vous connecter. ")
+        #messages.error(request, "Lien d'activation invalide.")
     return redirect('memoria:home')
 
 
