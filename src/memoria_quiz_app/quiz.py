@@ -20,8 +20,8 @@ def generate_questions(user, subject, difficulty):
     response = openai.chat.completions.create(
         # model="gpt-4-turbo-preview",
         model="gpt-3.5-turbo",
-        temperature=0.7,
-        max_tokens=3000,
+        temperature=0.5,
+        max_tokens=4096,
         response_format={"type": "json_object"},
         messages=[{"role": "system", "content": f"""
         Tu es un assistant IA spécialisé dans la génération de questions de quiz. 
@@ -40,8 +40,8 @@ def generate_questions(user, subject, difficulty):
             "explanation": "La boucle 'for' en Python est utilisée pour répéter une action un nombre défini de fois."
         """}]
     )
-
-    print(response.choices[0].message.content)
+    print(response)
+    #print(response.choices[0].message.content)
     try:
         json_response = json.loads(response.choices[0].message.content)
         questions_list = json_response['questions']
