@@ -107,7 +107,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Questions(models.Model):
-    user = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey("CustomUser", on_delete=models.CASCADE, null=True)
 
     question = models.TextField(blank=True, null=False, help_text="Question")
     subject = models.CharField(max_length=255, blank=True, null=True, help_text="Sujet de la question")

@@ -45,13 +45,11 @@ def activate(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
-    if user is not None :
-        if account_activation_token.check_token(user, token):
-            user.is_active = True
-            user.save()
-
-            messages.success(request, "Merci d'avoir confirmé votre email. Vous pouvez maintenant vous connecter. ")
-            return redirect("memoria:login")
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, "Merci d'avoir confirmé votre email. Vous pouvez maintenant vous connecter. ")
+        return redirect("memoria:login")
     else:
         messages.error(request, "Lien d'activation invalide.")
     return redirect('memoria:home')
