@@ -50,8 +50,8 @@ def activate(request, uidb64, token):
         user.save()
         messages.success(request, "Merci d'avoir confirmé votre email. Vous pouvez maintenant vous connecter. ")
         return redirect("memoria:login")
-    else:
-        messages.error(request, "Lien d'activation invalide.")
+
+    messages.error(request, "Lien d'activation invalide.")
     return redirect('memoria:home')
 
 
