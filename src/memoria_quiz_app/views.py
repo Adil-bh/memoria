@@ -222,8 +222,11 @@ class SubjectEdit(UpdateView):
             messages.success(request, "Les changements ont été pris en compte !")
             return redirect("memoria:index-subjects")
         else:
+            messages.error(request, "Veuillez renseigner tous les champs")
             form = UserSubjectsForm()
-            return render(request, "memoria/subject_edit.html", context={"form": form})
+            return super().get(request, *args, **kwargs)
+            #return redirect(request, "memoria:edit-subjects", context={"form": form})
+            #return render(request, "subjects/subject_edit.html", context={"form": form})
 
 
 # Quizz creation with OpenAI API

@@ -12,7 +12,8 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserSubjectsForm(ModelForm):
-    class Meta :
+
+    class Meta:
         model = CustomUser
         fields = ("subject1", "difficulty_subject1", "subject2", "difficulty_subject2", "difficulty_general_culture")
         subject1 = forms.CharField(required=True, min_length=5)
